@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>YıkılmışBirKieza</title>
+  <title>Kiyiza Baba</title>
   <style>
     body {
       margin: 0;
@@ -10,10 +10,43 @@
       background: url('bmd.jpg') no-repeat center center fixed;
       background-size: cover;
       height: 100vh;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: left;
+    }
+    #info {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 10px;
     }
   </style>
-  <script src="iplogger.js"></script>
 </head>
 <body>
+  <div id="info">Yükleniyor...</div>
+
+  <script>
+    fetch('https://ipwho.is/')
+      .then(res => res.json())
+      .then(data => {
+        const log = `
+<b>Ziyaretçi Girişi:</b><br>
+IP: ${data.ip}<br>
+Ülke: ${data.country}<br>
+Şehir: ${data.city}<br>
+İnternet Sağlayıcı: ${data.connection?.isp || 'Bilinmiyor'}<br>
+Lokasyon: ${data.latitude}, ${data.longitude}<br>
+Zaman Dilimi: ${data.timezone?.id || 'Bilinmiyor'}<br>
+Tarih: ${new Date().toLocaleString('tr-TR')}
+        `;
+        document.getElementById('info').innerHTML = log;
+      })
+      .catch(err => {
+        document.getElementById('info').innerText = 'Bilgiler alınamadı.';
+        console.error(err);
+      });
+  </script>
 </body>
 </html>
